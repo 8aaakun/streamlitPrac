@@ -1,5 +1,6 @@
 import streamlit as st
 from streamlit_chat import message
+from st_multimodal_chatinput import multimodal_chatinput
 
 #side bar
 if "api_key" not in st.session_state:
@@ -51,21 +52,32 @@ sidebar.button(
 
 #chat
 class chat:
+    img = None
     msg: str = None
     sender: str = None
 
 if 'chat' not in st.session_state:
     st.session_state['chat'] = []
 
-prompt = st.chat_input()
-if prompt:
-    chatting = chat()
-    chatting.msg = prompt
-    chatting.sender = 'user'
-    st.session_state.chat.append(chatting)
-
 
 #채팅 출력
-for i in st.session_state['chat']: 
-    with st.chat_message(i.sender):
-        st.write(i.msg)
+# for i in st.session_state['chat']: 
+#     with st.chat_message(i.sender):
+#         st.write(i.msg)
+
+chatContainer = st.container(height=450)
+prompt = multimodal_chatinput()
+
+if prompt :
+    chatting = chat()
+    if prompt['images']:
+        chatting.img = prompt['images']
+    chatting.msg = prompt['text']
+    chatting.sender = 'user'
+    st.session_state['chat'].append(chatting)
+    with chatContainer:
+        for i in st.session_state['chat']:
+            with st.chat_message(i.sender):
+                if i.img:
+                    st.image(i.img)
+                st.write(i.msg)
