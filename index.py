@@ -99,6 +99,10 @@ for i in st.session_state['chat']:
             st.write(i.msg)
 
 if userInput :
+    if not st.session_state['api_key']:
+        with chatContainer:
+            st.info("API 키를 입력해주세요")
+        st.stop()
     #유저 입력
     chatting = chat()
     if userInput['images']:
