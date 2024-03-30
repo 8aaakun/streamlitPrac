@@ -1,1 +1,2 @@
 st_multimodal_chatinput
+openai
